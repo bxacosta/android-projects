@@ -1,15 +1,21 @@
 package ec.edu.uce.controlador;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,11 +24,11 @@ import java.util.List;
 import ec.edu.uce.R;
 import ec.edu.uce.modelo.Vehiculo;
 import ec.edu.uce.vista.DataAdapter;
+import ec.edu.uce.vista.ItemClickListener;
 
 public class WelcomeActivity extends AppCompatActivity {
 
     private List<Vehiculo> vehiculos = new ArrayList<>();
-    private RecyclerView recyclerStdudents;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,19 +37,44 @@ public class WelcomeActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Inicializa los vehiculos
         initVehiculos();
-        recyclerStdudents = findViewById(R.id.RecyclerID);
+
+        // Inicializa el RecyclerView
+        RecyclerView recyclerStdudents = findViewById(R.id.RecyclerID);
         recyclerStdudents.setLayoutManager(new LinearLayoutManager(this));
 
-        DataAdapter adapter = new DataAdapter(vehiculos);
+        final DataAdapter adapter = new DataAdapter(vehiculos, this);
         recyclerStdudents.setAdapter(adapter);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        // Define el ClickListener
+        adapter.setItemClickListener(new ItemClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onClick(View view, final int position, boolean isLongClick) {
+                if (isLongClick) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(WelcomeActivity.this);
+                    builder.setTitle("Seleccione una opción");
+
+                    String[] options = {"Editar", "Eliminar"};
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int item) {
+                            switch (item) {
+                                case 0: // Editar
+
+                                    break;
+                                case 1: // Eliminar
+                                    vehiculos.remove(position);
+                                    adapter.notifyDataSetChanged();
+                                    break;
+                            }
+                        }
+                    });
+                    builder.show();
+                } else {
+                    Toast.makeText(WelcomeActivity.this, "Manten presionado para ver las opciones", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -73,10 +104,14 @@ public class WelcomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void redirectFormActivity(View view) {
+        Intent intent = new Intent(this, FormActivity.class);
+        startActivity(intent);
+    }
+
     public void initVehiculos() {
         vehiculos.add(new Vehiculo("ydf-1123", "patito", new Date(), 3212.4, true, "verde"));
         vehiculos.add(new Vehiculo("fsd-7523", "perrito", new Date(), 232316.4, true, "rojo"));
         vehiculos.add(new Vehiculo("jde-4523", "raton", new Date(), 223230.4, true, "azul"));
     }
-
 }

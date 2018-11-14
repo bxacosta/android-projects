@@ -1,11 +1,17 @@
 package ec.edu.uce.vista;
 
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -18,16 +24,19 @@ import ec.edu.uce.modelo.Vehiculo;
 
 public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolderData> {
 
-    List<Vehiculo> vehiculos;
+    private List<Vehiculo> vehiculos;
+    private Context context;
+    private ItemClickListener itemClickListener;
 
-    public DataAdapter(List<Vehiculo> vehiculos) {
+    public DataAdapter(List<Vehiculo> vehiculos, Context context) {
         this.vehiculos = vehiculos;
+        this.context = context;
     }
 
     @Override
     public ViewHolderData onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_list_data, null, false);
+                .inflate(R.layout.item_list_data, parent, false);
 
         return new ViewHolderData(view);
     }
@@ -44,7 +53,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolderData
         holder.marca.setText(vehiculos.get(position).getMarca());
         holder.fecha.setText(sdf.format(vehiculos.get(position).getFechaFabricacion()));
         holder.costo.setText(nf.format(vehiculos.get(position).getCosto()));
-        holder.matriculado.setText(vehiculos.get(position).getMatriculado()? "Si" : "No");
+        holder.matriculado.setText(vehiculos.get(position).getMatriculado() ? "Si" : "No");
         holder.color.setText(vehiculos.get(position).getColor());
     }
 
@@ -53,7 +62,11 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolderData
         return vehiculos.size();
     }
 
-    public class ViewHolderData extends RecyclerView.ViewHolder {
+    public void setItemClickListener(ItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
+
+    public class ViewHolderData extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         TextView placa;
         TextView marca;
@@ -71,6 +84,20 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolderData
             costo = itemView.findViewById(R.id.id_costo);
             matriculado = itemView.findViewById(R.id.id_matriculado);
             color = itemView.findViewById(R.id.id_color);
+
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            itemClickListener.onClick(v, getAdapterPosition(), false);
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            itemClickListener.onClick(v, getAdapterPosition(), true);
+            return true;
         }
     }
 }
