@@ -97,7 +97,7 @@
                         android:textSize="18dp"/>
 
                     <TextView
-                        android:id="@+id/id_date"
+                        android:id="@+id/txt_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -109,7 +109,7 @@
                 </LinearLayout>
 
                 <Button
-                    android:id="@+id/button"
+                    android:id="@+id/btn_save"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"

@@ -28,7 +28,8 @@ import ec.edu.uce.vista.ItemClickListener;
 
 public class WelcomeActivity extends AppCompatActivity {
 
-    private List<Vehiculo> vehiculos = new ArrayList<>();
+    public static List<Vehiculo> vehiculos = new ArrayList<>();
+    public static DataAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +45,7 @@ public class WelcomeActivity extends AppCompatActivity {
         RecyclerView recyclerStdudents = findViewById(R.id.RecyclerID);
         recyclerStdudents.setLayoutManager(new LinearLayoutManager(this));
 
-        final DataAdapter adapter = new DataAdapter(vehiculos, this);
+        adapter = new DataAdapter(vehiculos, this);
         recyclerStdudents.setAdapter(adapter);
 
         // Define el ClickListener

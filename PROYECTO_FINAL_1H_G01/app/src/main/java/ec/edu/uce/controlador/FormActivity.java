@@ -1,6 +1,7 @@
 package ec.edu.uce.controlador;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -8,6 +9,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Switch;
@@ -36,45 +38,48 @@ public class FormActivity extends AppCompatActivity implements DatePickerDialog.
         setContentView(R.layout.activity_form);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
     }
 
     public void save(View view) {
-        System.out.println("Entra prro");
-        EditText txtPlaca = view.findViewById(R.id.id_placa);
-        EditText txtMarca = view.findViewById(R.id.id_marca);
-        EditText txtCosto = view.findViewById(R.id.id_costo);
-        System.out.println("Entra prro 1");
-        EditText txtColor = view.findViewById(R.id.id_color);
-        Switch wsEnrollment = view.findViewById(R.id.sw_enrollment);
-        TextView txtDate = view.findViewById(R.id.id_date);
+        EditText txtPlaca = findViewById(R.id.txt_license);
+        EditText txtMarca = findViewById(R.id.txt_brand);
+        EditText txtCosto = findViewById(R.id.txt_costo);
+        EditText txtColor = findViewById(R.id.txt_color);
+        Switch wsEnrollment = findViewById(R.id.sw_enrollment);
+        TextView txtDate = findViewById(R.id.txt_date);
 
-        System.out.println("Entra prro 2");
+        System.out.println(txtPlaca.getText().toString());
+        System.out.println(txtMarca.getText().toString());
+        
         String datePattern = "dd MMMM yyyy";
-        System.out.println("Entra prro 3");
         SimpleDateFormat sdf = new SimpleDateFormat(datePattern);
-        System.out.println("Entra prro 4");
 
-        //System.out.println("Precios: " + txtCosto.getText().toString());
-        //Double cost = Double.parseDouble(txtCosto.getText().toString());
-        //Boolean enrollment = wsEnrollment.isChecked();
+        System.out.println("Precios: " + txtCosto.getText().toString());
+        Double cost = Double.parseDouble(txtCosto.getText().toString());
+        Boolean isEnrollment = wsEnrollment.isChecked();
         Date date = new Date();
-//        try {
-//            date = sdf.parse(txtDate.getText().toString());
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            date = sdf.parse(txtDate.getText().toString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         Vehiculo vehiculo = new Vehiculo();
         vehiculo.setPlaca(txtPlaca.getText().toString());
         vehiculo.setMarca(txtMarca.getText().toString());
-        vehiculo.setCosto(121.123);
+        vehiculo.setCosto(cost);
         vehiculo.setColor(txtColor.getText().toString());
-        vehiculo.setMatriculado(true);
-        vehiculo.setFechaFabricacion(new Date());
+        vehiculo.setMatriculado(isEnrollment);
+        vehiculo.setFechaFabricacion(date);
 
         try {
-            vehiculoService.initResources(this);
-            vehiculoService.save(vehiculo);
+//            vehiculoService.initResources(this);
+            WelcomeActivity.vehiculos.add(vehiculo);
+            WelcomeActivity.adapter.notifyDataSetChanged();
+//            vehiculoService.save(vehiculo);
+            Toast.makeText(this, "Vehiculo con la placa " + vehiculo.getPlaca().toUpperCase() + " agregado correctamente", Toast.LENGTH_LONG).show();
+            finish();
         }catch (CustomException e){
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
@@ -96,7 +101,7 @@ public class FormActivity extends AppCompatActivity implements DatePickerDialog.
         SimpleDateFormat sdf = new SimpleDateFormat(datePattern);
 
         String date = sdf.format(c.getTime());
-        TextView txtFecha = findViewById(R.id.id_date);
+        TextView txtFecha = findViewById(R.id.txt_date);
         txtFecha.setText(date);
     }
 }

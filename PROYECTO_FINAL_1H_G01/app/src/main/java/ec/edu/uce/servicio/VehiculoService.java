@@ -57,7 +57,7 @@ public class VehiculoService {
         List<Vehiculo> vehiculos = new ArrayList<>();
         if (!vehiculoData.isEmpty()) {
             try {
-                vehiculos = MAPPER.readValue(vehiculoData, new TypeReference<List<Usuario>>() {
+                vehiculos = MAPPER.readValue(vehiculoData, new TypeReference<List<Vehiculo>>() {
                 });
             } catch (IOException e) {
                 throw new CustomException("Error al leer el archivo: " + VEHICULO_FILE_NAME, e);
