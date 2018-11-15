@@ -30,7 +30,7 @@ public class RegisterActivity extends AppCompatActivity {
         EditText txtPassword = findViewById(R.id.txtPassword);
 
         try {
-            userService.initResources();
+            userService.initResources(this);
 
             Usuario usuario = new Usuario(txtUsername.getText().toString(), txtPassword.getText().toString());
             if (userService.exist(usuario)) {

@@ -11,6 +11,9 @@ public class Vehiculo {
     private Boolean matriculado;
     private String color;
 
+    public Vehiculo() {
+    }
+
     public Vehiculo(String placa, String marca, Date fechaFabricacion, Double costo, Boolean matriculado, String color) {
         this.placa = placa;
         this.marca = marca;

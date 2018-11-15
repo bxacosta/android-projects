@@ -52,13 +52,13 @@
                     android:inputType="textPersonName" />
 
                 <EditText
-                    android:id="@+id/txt_cost"
+                    android:id="@+id/txt_costo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ems="10"
                     android:layout_marginTop="10dp"
+                    android:ems="10"
                     android:hint="@string/input_cost"
-                    android:inputType="numberDecimal" />
+                    android:inputType="number" />
 
                 <EditText
                     android:id="@+id/txt_color"
@@ -80,8 +80,32 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textSize="18dp"
-                        android:text="@string/switch_enrollment" />
+                        android:text="@string/switch_enrollment"
+                        android:textSize="18dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Fecha fabricación:"
+                        android:textSize="18dp"/>
+
+                    <TextView
+                        android:id="@+id/id_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="showDataPicker"
+                        android:hint="Seleccione"
+                        android:gravity="right"
+                        android:textSize="18dp"/>
+
                 </LinearLayout>
 
                 <Button
@@ -89,8 +113,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:text="@string/save"
-                    android:onClick="save"/>
+                    android:onClick="save"
+                    android:text="@string/save" />
 
             </LinearLayout>
         </ScrollView>

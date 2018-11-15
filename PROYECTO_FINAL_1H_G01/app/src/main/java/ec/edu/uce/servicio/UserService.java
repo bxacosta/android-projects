@@ -1,5 +1,8 @@
 package ec.edu.uce.servicio;
 
+import android.content.Context;
+import android.widget.Toast;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,13 +29,15 @@ public class UserService {
         this.registerFile = fileManager.getFile(REGISTER_FILE_NAME);
     }
 
-    public void initResources() {
+    public void initResources(Context context) {
         try {
             if (!fileManager.existBaseFolder()) {
                 fileManager.createBaseFolder();
+                Toast.makeText(context, "Creando carpeta: " + fileManager.getBaseFolder().getName(), Toast.LENGTH_LONG).show();
             }
             if (!fileManager.existFile(REGISTER_FILE_NAME)) {
                 fileManager.createFile(REGISTER_FILE_NAME);
+                Toast.makeText(context, "Creando el archivo: " + REGISTER_FILE_NAME, Toast.LENGTH_LONG).show();
             }
         } catch (StorageException e) {
             throw new CustomException(e.getMessage(), e);
