@@ -1,8 +1,10 @@
 package ec.edu.uce.modelo;
 
+import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
-public class Vehiculo {
+public class Vehiculo implements Serializable {
 
     private String placa;
     private String marca;
@@ -69,5 +71,32 @@ public class Vehiculo {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Vehiculo vehiculo = (Vehiculo) o;
+
+        return placa != null ? placa.equals(vehiculo.placa) : vehiculo.placa == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return placa != null ? placa.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Vehiculo{" +
+                "placa='" + placa + '\'' +
+                ", marca='" + marca + '\'' +
+                ", fechaFabricacion=" + fechaFabricacion +
+                ", costo=" + costo +
+                ", matriculado=" + matriculado +
+                ", color='" + color + '\'' +
+                '}';
     }
 }
