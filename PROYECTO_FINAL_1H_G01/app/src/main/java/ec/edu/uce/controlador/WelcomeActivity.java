@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -47,7 +46,6 @@ public class WelcomeActivity extends AppCompatActivity {
         RecyclerView recyclerStdudents = findViewById(R.id.RecyclerID);
         recyclerStdudents.setLayoutManager(new LinearLayoutManager(this));
 
-        Collections.sort(vehiculos, Vehiculo.getCompByFechaFabricacion());
         adapter = new DataAdapter(vehiculos, this);
         recyclerStdudents.setAdapter(adapter);
 
@@ -84,6 +82,8 @@ public class WelcomeActivity extends AppCompatActivity {
                 }
             }
         });
+
+        updateRecyclerView();
     }
 
     public void persistData() {
@@ -118,7 +118,7 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     public static void updateRecyclerView() {
-        Collections.sort(vehiculos, Vehiculo.getCompByFechaFabricacion());
+        Collections.sort(vehiculos, Vehiculo.getCompByPlaca());
         adapter.notifyDataSetChanged();
     }
 

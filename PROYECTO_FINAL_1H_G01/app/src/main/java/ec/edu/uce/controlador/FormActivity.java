@@ -5,11 +5,10 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -90,9 +89,14 @@ public class FormActivity extends AppCompatActivity implements DatePickerDialog.
             Toast.makeText(this, "La fecha debe estar entre: " + sdf.format(min) + " y " + sdf.format(max), Toast.LENGTH_LONG).show();
         }
         // Validar Placa
-        if (!txtPlaca.getText().toString().matches("([A-Za-z]{3}-[0-9]{3,4})") ) {
+        if (!txtPlaca.getText().toString().matches("([A-Za-z]{3}-[0-9]{3,4})")) {
             guardar = false;
             txtPlaca.setError("La palca debe tener el siguiente formato: AAA-1234");
+        }
+        if (TextUtils.isEmpty(txtMarca.getText()) || TextUtils.isEmpty(txtColor.getText())) {
+            guardar = false;
+            txtMarca.setError("Este campo es obligatorio");
+            txtColor.setError("Este campo es obligatorio");
         }
 
         vehiculo.setPlaca(txtPlaca.getText().toString());

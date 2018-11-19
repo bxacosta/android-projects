@@ -1,10 +1,8 @@
 package ec.edu.uce.modelo;
 
 import java.io.Serializable;
-import java.lang.reflect.Method;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Objects;
 
 public class Vehiculo implements Serializable {
 
@@ -117,12 +115,48 @@ public class Vehiculo implements Serializable {
         };
     }
 
-//    public static Comparator<Vehiculo> getCompByText(Class) {
-//        return new Comparator<Vehiculo>() {
-//            @Override
-//            public int compare(Vehiculo o1, Vehiculo o2) {
-//                return o1.getColor().compareTo(o2.getColor());
-//            }
-//        };
-//    }
+    public static Comparator<Vehiculo> getCompByPlaca() {
+        return new Comparator<Vehiculo>() {
+            @Override
+            public int compare(Vehiculo o1, Vehiculo o2) {
+                return o1.getPlaca().compareToIgnoreCase(o2.getPlaca());
+            }
+        };
+    }
+
+    public static Comparator<Vehiculo> getCompByMarca() {
+        return new Comparator<Vehiculo>() {
+            @Override
+            public int compare(Vehiculo o1, Vehiculo o2) {
+                return o1.getMarca().compareToIgnoreCase(o2.getMarca());
+            }
+        };
+    }
+
+    public static Comparator<Vehiculo> getCompByColor() {
+        return new Comparator<Vehiculo>() {
+            @Override
+            public int compare(Vehiculo o1, Vehiculo o2) {
+                return o1.getColor().compareToIgnoreCase(o2.getColor());
+            }
+        };
+    }
+
+    public static Comparator<Vehiculo> getCompByCosto() {
+        return new Comparator<Vehiculo>() {
+            @Override
+            public int compare(Vehiculo o1, Vehiculo o2) {
+                return (int) (o1.getCosto() - o2.getCosto());
+            }
+        };
+    }
+
+    public static Comparator<Vehiculo> getCompByMatriculado() {
+        return new Comparator<Vehiculo>() {
+            @Override
+            public int compare(Vehiculo o1, Vehiculo o2) {
+                return o1.getMatriculado().compareTo(o2.getMatriculado());
+            }
+        };
+    }
 }
