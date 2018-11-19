@@ -18,6 +18,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import ec.edu.uce.R;
 import ec.edu.uce.componentes.CustomException;
@@ -66,19 +67,32 @@ public class FormActivity extends AppCompatActivity implements DatePickerDialog.
     }
 
     public void save(View view) {
-        String datePattern = "dd MMMM yyyy";
-        SimpleDateFormat sdf = new SimpleDateFormat(datePattern);
-
-        Double cost = Double.parseDouble(txtCosto.getText().toString());
-
         // todo
         Boolean isEnrollment = wsEnrollment.isChecked();
 
+        Double cost = Double.parseDouble(txtCosto.getText().toString());
+        String datePattern = "dd MMMM yyyy";
+        SimpleDateFormat sdf = new SimpleDateFormat(datePattern);
         Date date = new Date();
         try {
             date = sdf.parse(txtDate.getText().toString());
         } catch (ParseException e) {
             e.printStackTrace();
+        }
+
+        boolean guardar = true;
+        // Validar fechas
+        Date max = new Date();
+        Date min = new GregorianCalendar(1995, 01, 01).getTime();
+        if (date.after(max) || date.before(min)) {
+            guardar = false;
+            txtDate.setError("");
+            Toast.makeText(this, "La fecha debe estar entre: " + sdf.format(min) + " y " + sdf.format(max), Toast.LENGTH_LONG).show();
+        }
+        // Validar Placa
+        if (!txtPlaca.getText().toString().matches("([A-Za-z]{3}-[0-9]{3,4})") ) {
+            guardar = false;
+            txtPlaca.setError("La palca debe tener el siguiente formato: AAA-1234");
         }
 
         vehiculo.setPlaca(txtPlaca.getText().toString());
@@ -88,23 +102,25 @@ public class FormActivity extends AppCompatActivity implements DatePickerDialog.
         vehiculo.setMatriculado(isEnrollment);
         vehiculo.setFechaFabricacion(date);
 
-        try {
-            if (position == -1) {
-                if (!WelcomeActivity.vehiculos.contains(vehiculo)) {
-                    WelcomeActivity.vehiculos.add(vehiculo);
-                    Toast.makeText(this, "Vehiculo con la placa " + vehiculo.getPlaca().toUpperCase() + " agregado correctamente", Toast.LENGTH_LONG).show();
-                    finish();
+        if (guardar) {
+            try {
+                if (position == -1) {
+                    if (!WelcomeActivity.vehiculos.contains(vehiculo)) {
+                        WelcomeActivity.vehiculos.add(vehiculo);
+                        Toast.makeText(this, "Vehiculo con la placa " + vehiculo.getPlaca().toUpperCase() + " agregado correctamente", Toast.LENGTH_LONG).show();
+                        finish();
+                    } else {
+                        Toast.makeText(this, "Vehiculo con la placa " + vehiculo.getPlaca().toUpperCase() + " ya existe ingrese otro", Toast.LENGTH_LONG).show();
+                    }
                 } else {
-                    Toast.makeText(this, "Vehiculo con la placa " + vehiculo.getPlaca().toUpperCase() + " ya existe ingrese otro", Toast.LENGTH_LONG).show();
+                    WelcomeActivity.vehiculos.set(position, vehiculo);
+                    Toast.makeText(this, "Vehiculo con la placa " + vehiculo.getPlaca().toUpperCase() + " se edito correctamente", Toast.LENGTH_LONG).show();
+                    finish();
                 }
-            } else {
-                WelcomeActivity.vehiculos.set(position, vehiculo);
-                Toast.makeText(this, "Vehiculo con la placa " + vehiculo.getPlaca().toUpperCase() + " se edito correctamente", Toast.LENGTH_LONG).show();
-                finish();
+                WelcomeActivity.updateRecyclerView();
+            } catch (CustomException e) {
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
             }
-            WelcomeActivity.updateRecyclerView();
-        } catch (CustomException e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 

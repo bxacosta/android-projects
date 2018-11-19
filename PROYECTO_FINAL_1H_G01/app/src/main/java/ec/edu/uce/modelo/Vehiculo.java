@@ -1,6 +1,7 @@
 package ec.edu.uce.modelo;
 
 import java.io.Serializable;
+import java.lang.reflect.Method;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Objects;
@@ -115,4 +116,13 @@ public class Vehiculo implements Serializable {
             }
         };
     }
+
+//    public static Comparator<Vehiculo> getCompByText(Class) {
+//        return new Comparator<Vehiculo>() {
+//            @Override
+//            public int compare(Vehiculo o1, Vehiculo o2) {
+//                return o1.getColor().compareTo(o2.getColor());
+//            }
+//        };
+//    }
 }
