@@ -6,8 +6,10 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,7 +22,6 @@ import java.util.Date;
 import ec.edu.uce.R;
 import ec.edu.uce.componentes.CustomException;
 import ec.edu.uce.modelo.Vehiculo;
-import ec.edu.uce.servicio.VehiculoService;
 import ec.edu.uce.vista.DatePickerFragment;
 
 public class FormActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
@@ -29,8 +30,12 @@ public class FormActivity extends AppCompatActivity implements DatePickerDialog.
     private EditText txtMarca;
     private EditText txtCosto;
     private EditText txtColor;
-    private Switch wsEnrollment;
     private TextView txtDate;
+
+    // Comentar dependiendo de con cual se trabaja
+    private Switch wsEnrollment;
+//    private CheckBox wsEnrollment;
+//    private boolean isEnrollment;  // Comentar los que estan con azul (todo)
 
     private Vehiculo vehiculo;
     private int position;
@@ -46,8 +51,10 @@ public class FormActivity extends AppCompatActivity implements DatePickerDialog.
         txtMarca = findViewById(R.id.txt_brand);
         txtCosto = findViewById(R.id.txt_costo);
         txtColor = findViewById(R.id.txt_color);
-        wsEnrollment = findViewById(R.id.sw_enrollment);
         txtDate = findViewById(R.id.txt_date);
+
+        // todo
+        wsEnrollment = findViewById(R.id.sw_enrollment);
 
         position = getIntent().getIntExtra("position", -1);
         if (position == -1) {
@@ -63,6 +70,8 @@ public class FormActivity extends AppCompatActivity implements DatePickerDialog.
         SimpleDateFormat sdf = new SimpleDateFormat(datePattern);
 
         Double cost = Double.parseDouble(txtCosto.getText().toString());
+
+        // todo
         Boolean isEnrollment = wsEnrollment.isChecked();
 
         Date date = new Date();
@@ -93,7 +102,7 @@ public class FormActivity extends AppCompatActivity implements DatePickerDialog.
                 Toast.makeText(this, "Vehiculo con la placa " + vehiculo.getPlaca().toUpperCase() + " se edito correctamente", Toast.LENGTH_LONG).show();
                 finish();
             }
-            WelcomeActivity.adapter.notifyDataSetChanged();
+            WelcomeActivity.updateRecyclerView();
         } catch (CustomException e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
@@ -111,8 +120,11 @@ public class FormActivity extends AppCompatActivity implements DatePickerDialog.
         txtMarca.setText(vehiculo.getMarca());
         txtCosto.setText(String.valueOf(vehiculo.getCosto()));
         txtColor.setText(vehiculo.getColor());
-        wsEnrollment.setChecked(vehiculo.getMatriculado());
         txtDate.setText(sdf.format(vehiculo.getFechaFabricacion()));
+
+        //todo
+        wsEnrollment.setChecked(vehiculo.getMatriculado());
+//        checkButtos();
     }
 
     public void showDataPicker(View view) {
@@ -134,4 +146,28 @@ public class FormActivity extends AppCompatActivity implements DatePickerDialog.
         TextView txtFecha = findViewById(R.id.txt_date);
         txtFecha.setText(date);
     }
+
+//    // todo Descoemtnar si se trabaja con checkButtos
+//    private void checkButtos() {
+//        RadioButton rbYes = findViewById(R.id.sw_enrollment_yes);
+//        RadioButton rbNo = findViewById(R.id.sw_enrollment_no);
+//
+//        rbYes.setChecked(vehiculo.getMatriculado());
+//        rbNo.setChecked(!vehiculo.getMatriculado());
+//    }
+//
+//    // todo Descoemtnar si se trabaja con checkButtos
+//    public void onRadioButtonClicked(View view) {
+//        boolean checked = ((RadioButton) view).isChecked();
+//        switch(view.getId()) {
+//            case R.id.sw_enrollment_yes:
+//                if (checked)
+//                    isEnrollment = true;
+//                break;
+//            case R.id.sw_enrollment_no:
+//                if (checked)
+//                    isEnrollment = false;
+//                break;
+//        }
+//    }
 }

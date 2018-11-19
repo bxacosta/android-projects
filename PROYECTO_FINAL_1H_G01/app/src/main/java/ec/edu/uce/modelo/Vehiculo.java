@@ -1,6 +1,7 @@
 package ec.edu.uce.modelo;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Objects;
 
@@ -98,5 +99,20 @@ public class Vehiculo implements Serializable {
                 ", matriculado=" + matriculado +
                 ", color='" + color + '\'' +
                 '}';
+    }
+
+    public static Comparator<Vehiculo> getCompByFechaFabricacion() {
+        return new Comparator<Vehiculo>() {
+            @Override
+            public int compare(Vehiculo o1, Vehiculo o2) {
+                if (o1.getFechaFabricacion().before(o2.getFechaFabricacion())) {
+                    return -1;
+                } else if (o1.getFechaFabricacion().after(o2.getFechaFabricacion())) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        };
     }
 }
