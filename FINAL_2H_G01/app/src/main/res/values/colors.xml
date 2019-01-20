@@ -6,4 +6,7 @@
     <color name="textLight">#fff</color>
     <color name="textPrimary">#000</color>
     <color name="textSecondary">#8c8c8c</color>
+
+    <color name="blackFilter">#bf000000</color>
+    <color name="WhiteFilter">#66ffffff</color>
 </resources>

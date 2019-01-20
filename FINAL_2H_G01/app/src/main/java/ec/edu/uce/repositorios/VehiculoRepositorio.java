@@ -7,22 +7,17 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.provider.BaseColumns;
-import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
-import java.nio.ByteBuffer;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import ec.edu.uce.componentes.CustomException;
 import ec.edu.uce.componentes.Funcion;
 import ec.edu.uce.database.DatabaseHelper;
-import ec.edu.uce.database.Tablas;
 import ec.edu.uce.database.Tablas.VEHICULO;
 import ec.edu.uce.modelo.Vehiculo;
 
@@ -52,8 +47,6 @@ public class VehiculoRepositorio implements InterfazCRUD<Vehiculo, String> {
         values.put(VEHICULO.COL_ESTADO, vehiculo.getEstado());
         values.put(VEHICULO.COL_TIPO, vehiculo.getTipo());
 
-        System.out.println("ANTES DE GUARDAR\n"+ vehiculo.toString());
-
         long idNuevoVehiculo = database.insert(VEHICULO.NOMBRE_TABLA, null, values);
 
         if (idNuevoVehiculo != -1) {
@@ -64,8 +57,29 @@ public class VehiculoRepositorio implements InterfazCRUD<Vehiculo, String> {
     }
 
     @Override
-    public String actualizar(String id, Vehiculo obj) {
-        return null;
+    public String actualizar(String placa, Vehiculo vehiculo) {
+        database = databaseHelper.getWritableDatabase();
+        values = new ContentValues();
+        values.put(VEHICULO.COL_PLACA, vehiculo.getPlaca());
+        values.put(VEHICULO.COL_MARCA, vehiculo.getMarca());
+        values.put(VEHICULO.COL_FECHA, sdf.format(vehiculo.getFechaFabricacion()));
+        values.put(VEHICULO.COL_COSTO, vehiculo.getCosto());
+        values.put(VEHICULO.COL_MATRICULADO, vehiculo.getMatriculado());
+        values.put(VEHICULO.COL_COLOR, vehiculo.getColor());
+        values.put(VEHICULO.COL_FOTO, convertBitmatToByteArray(vehiculo.getFoto()));
+        values.put(VEHICULO.COL_ESTADO, vehiculo.getEstado());
+        values.put(VEHICULO.COL_TIPO, vehiculo.getTipo());
+
+        String selection = VEHICULO.COL_PLACA + " = ?";
+        String[] selectionArgs = {placa};
+
+        long filasActualizadas = database.update(VEHICULO.NOMBRE_TABLA, values, selection, selectionArgs);
+
+        if (filasActualizadas > 0) {
+            return "Vehiculo " + placa + " actualizado correctamente";
+        } else {
+            throw new CustomException("Error al actualizar el vehiculo " + placa);
+        }
     }
 
     @Override

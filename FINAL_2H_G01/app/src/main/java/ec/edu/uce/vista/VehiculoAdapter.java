@@ -15,6 +15,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -29,7 +30,6 @@ public class VehiculoAdapter extends RecyclerView.Adapter<VehiculoAdapter.Vehicu
     private ItemClickListener itemClickListener;
 
     public VehiculoAdapter(List<Vehiculo> vehiculos) {
-
         this.vehiculos = vehiculos;
         this.vehiculosFiltrados = vehiculos;
     }
@@ -50,18 +50,15 @@ public class VehiculoAdapter extends RecyclerView.Adapter<VehiculoAdapter.Vehicu
         SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
         NumberFormat nf = new DecimalFormat("###,##0.00");
 
-        holder.placa.setText(vehiculos.get(i).getPlaca());
-        holder.marca.setText(vehiculos.get(i).getMarca());
-        holder.fabricado.setText(df.format(vehiculos.get(i).getFechaFabricacion()));
-        holder.costo.setText("USD " + nf.format(vehiculos.get(i).getCosto()));
-        holder.matriculado.setText(vehiculos.get(i).getMatriculado() ? "Si" : "No");
-        holder.color.setText(vehiculos.get(i).getColor());
-        System.out.println("BYTES:\n" + vehiculos.get(i).getFoto());
-        holder.foto.setImageBitmap(vehiculos.get(i).getFoto());
-        holder.estado.setText(vehiculos.get(i).getEstado()? "Si" : "No");
-        holder.tipo.setText(vehiculos.get(i).getTipo());
-
-        Vehiculo vehiculo = vehiculosFiltrados.get(i);
+        holder.placa.setText(vehiculosFiltrados.get(i).getPlaca());
+        holder.marca.setText(vehiculosFiltrados.get(i).getMarca());
+        holder.fabricado.setText(df.format(vehiculosFiltrados.get(i).getFechaFabricacion()));
+        holder.costo.setText("USD " + nf.format(vehiculosFiltrados.get(i).getCosto()));
+        holder.matriculado.setText(vehiculosFiltrados.get(i).getMatriculado() ? "Si" : "No");
+        holder.color.setText(vehiculosFiltrados.get(i).getColor());
+        holder.foto.setImageBitmap(vehiculosFiltrados.get(i).getFoto());
+        holder.estado.setText(vehiculosFiltrados.get(i).getEstado() ? "Si" : "No");
+        holder.tipo.setText(vehiculosFiltrados.get(i).getTipo());
     }
 
     @Override
@@ -74,17 +71,31 @@ public class VehiculoAdapter extends RecyclerView.Adapter<VehiculoAdapter.Vehicu
     }
 
     public Vehiculo obtenerVehiculo(int posision) {
-        return vehiculos.get(posision);
+        return vehiculosFiltrados.get(posision);
     }
 
-    public void eliminarVehiculo(int posision) {
-        Vehiculo eliminado = vehiculos.remove(posision);
-        notifyItemRemoved(posision);
+    public int eliminarVehiculo(int posision) {
+        if (vehiculos == vehiculosFiltrados) {
+            vehiculosFiltrados.remove(posision);
+            notifyItemRemoved(posision);
+            return posision;
+        } else {
+            int originalIndex = vehiculos.indexOf(vehiculosFiltrados.remove(posision));
+            vehiculos.remove(originalIndex);
+            notifyItemRemoved(posision);
+            return originalIndex;
+        }
     }
 
-    public void restaurarVehiculo(Vehiculo vehiculo, int posision) {
-        vehiculos.add(posision, vehiculo);
-        notifyItemInserted(posision);
+    public void restaurarVehiculo(Vehiculo vehiculo, int posision, int original) {
+        if (vehiculos == vehiculosFiltrados) {
+            vehiculosFiltrados.add(posision, vehiculo);
+            notifyItemInserted(posision);
+        } else {
+            vehiculosFiltrados.add(posision, vehiculo);
+            vehiculos.add(original, vehiculo);
+            notifyItemInserted(posision);
+        }
     }
 
     @Override

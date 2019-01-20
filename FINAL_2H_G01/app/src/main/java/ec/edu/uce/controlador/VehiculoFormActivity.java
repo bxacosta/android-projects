@@ -51,6 +51,8 @@ public class VehiculoFormActivity extends AppCompatActivity {
     private BottomSheetDialog dialog;
     private Bitmap fotoBitmap;
     private Vehiculo vehiculo;
+    private boolean nuevo;
+    private String placaAnterior;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +69,13 @@ public class VehiculoFormActivity extends AppCompatActivity {
 
         txtFecha.setOnClickListener(seleccionarFechaListener);
 
-        if (true) {
-            vehiculo = new Vehiculo();
+        placaAnterior = getIntent().getStringExtra("placa");
+        nuevo = placaAnterior == null;
+        if (nuevo) {
+            vehiculo = new Vehiculo(); 
+        } else {
+            vehiculo = vehiculoServicio.buscarPorPlaca(placaAnterior);
+            llenarCampos();
         }
     }
 
@@ -115,12 +122,16 @@ public class VehiculoFormActivity extends AppCompatActivity {
             } catch (ParseException e) {
                 txtFecha.setError("El formato de fecha ingresado es incorrecto");
             }
-            RadioButton rbEstado = findViewById(rgTipo.getCheckedRadioButtonId());
-            vehiculo.setTipo(rbEstado.getText().toString());
+            RadioButton rbTipo = findViewById(rgTipo.getCheckedRadioButtonId());
+            vehiculo.setTipo(rbTipo.getText().toString());
 
             try {
-                vehiculoServicio.crear(vehiculo);
-                Toast.makeText(view.getContext(), "Vehiculo " + vehiculo.getPlaca() + " guardado correctamente", Toast.LENGTH_SHORT).show();
+                if (nuevo) {
+                    vehiculoServicio.crear(vehiculo);
+                } else {
+                    vehiculoServicio.actualizar(placaAnterior, vehiculo);
+                }
+                Toast.makeText(view.getContext(), "Vehiculo " + vehiculo.getPlaca() + " guardado correctamente", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(view.getContext(), VehiculoActivity.class);
                 startActivity(intent);
                 finish();
@@ -233,6 +244,23 @@ public class VehiculoFormActivity extends AppCompatActivity {
         swEstado = findViewById(R.id.swEstado);
         rgTipo = findViewById(R.id.rgTipo);
         ivFoto = findViewById(R.id.ivFoto);
+    }
+
+    private void llenarCampos() {
+        txtPlaca.setText(vehiculo.getPlaca());
+        txtMarca.setText(vehiculo.getMarca());
+        txtFecha.setText(sdf.format(vehiculo.getFechaFabricacion()));
+        txtCosto.setText(String.valueOf(vehiculo.getCosto()));
+        swMatriculado.setChecked(vehiculo.getMatriculado());
+        txtColor.setText(vehiculo.getColor());
+        swEstado.setChecked(vehiculo.getEstado());
+        ivFoto.setImageBitmap(vehiculo.getFoto());
+        ivFoto.setVisibility(View.VISIBLE);
+
+        RadioButton rbTipo = rgTipo.findViewWithTag(vehiculo.getTipo());
+        if (rbTipo != null) {
+            rbTipo.setChecked(true);
+        }
     }
 
     @Override

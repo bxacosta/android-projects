@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ec.edu.uce">
 
-    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -31,7 +33,16 @@
         <activity
             android:name=".controlador.VehiculoActivity"
             android:label="@string/title_activity_vehiculo"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/fragment_search" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".controlador.VehiculoFormActivity"
             android:label="@string/title_activity_vehiculo_form"

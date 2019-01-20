@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/app_background"
     tools:context=".controlador.InicioActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -24,6 +25,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/blackFilter"
         android:gravity="center"
         android:padding="@dimen/content_padding">
 
@@ -37,19 +39,21 @@
                 android:id="@+id/btnVehiculo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/content_padding"
-                android:paddingBottom="@dimen/content_padding"
-                android:background="@color/colorPrimary"
+                android:paddingTop="@dimen/main_button"
+                android:paddingBottom="@dimen/main_button"
+                android:background="@color/WhiteFilter"
+                android:textSize="@dimen/mainText"
                 android:text="@string/vehiculo"/>
 
             <Button
                 android:id="@+id/btnReserva"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/content_padding"
-                android:paddingBottom="@dimen/content_padding"
+                android:paddingTop="@dimen/main_button"
+                android:paddingBottom="@dimen/main_button"
                 android:layout_marginTop="@dimen/content_padding"
-                android:background="@color/colorPrimary"
+                android:background="@color/WhiteFilter"
+                android:textSize="@dimen/mainText"
                 android:text="@string/reserva"/>
 
         </LinearLayout>

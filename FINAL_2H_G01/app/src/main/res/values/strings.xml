@@ -2,7 +2,7 @@
     <string name="app_name">FINAL_G1</string>
 
     <!--menu inicio-->
-    <string name="configuracion">Configuración</string>
+    <string name="configurar">Configurar</string>
     <string name="salir">Salir</string>
 
     <!--menu vehiculo-->

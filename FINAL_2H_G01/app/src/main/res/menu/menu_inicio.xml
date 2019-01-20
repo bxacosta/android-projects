@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/action_configurar"
-        android:title="@string/configuracion" />
+        android:title="@string/configurar" />
 
     <item
         android:id="@+id/action_salir"

@@ -180,26 +180,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingTop="20dp"
-                android:checkedButton="@+id/rbVehiculo"
+                android:checkedButton="@+id/rbAutomovil"
                 android:orientation="horizontal">
 
                 <RadioButton
-                    android:id="@+id/rbVehiculo"
+                    android:id="@+id/rbAutomovil"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:tag="@string/automovil"
                     android:text="@string/automovil" />
 
                 <RadioButton
+                    android:id="@+id/rbCamioneta"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:tag="@string/camioneta"
                     android:text="@string/camioneta" />
 
                 <RadioButton
+                    android:id="@+id/rbFurgoneta"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:tag="@string/furgoneta"
                     android:text="@string/furgoneta" />
             </RadioGroup>
 

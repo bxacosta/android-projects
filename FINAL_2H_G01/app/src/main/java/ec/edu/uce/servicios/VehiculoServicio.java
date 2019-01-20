@@ -30,6 +30,18 @@ public class VehiculoServicio {
         }
     }
 
+    public void actualizar(String placa, Vehiculo vehiculo) {
+        if (placa.equalsIgnoreCase(vehiculo.getPlaca())) {
+            vehiculoRepositorio.actualizar(placa, vehiculo);
+        } else {
+            if (buscarPorPlaca(vehiculo.getPlaca()) == null) {
+                vehiculoRepositorio.actualizar(placa, vehiculo);
+            } else {
+                throw new CustomException("Ya existe un vehiculo con la placa " + vehiculo.getPlaca());
+            }
+        }
+    }
+
     public Vehiculo buscarPorPlaca(String placa) {
         List<Vehiculo> usuarios = vehiculoRepositorio.buscarPorParametro(new Funcion<Vehiculo, String>() {
             @Override
