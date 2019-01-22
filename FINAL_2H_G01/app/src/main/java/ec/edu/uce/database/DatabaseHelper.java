@@ -17,12 +17,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_USUARIO);
         db.execSQL(SQL_CREATE_VEHICULO);
+        db.execSQL(SQL_CREATE_RESERVA);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(SQL_DELETE_USUARIO);
         db.execSQL(SQL_DELETE_VEHICULO);
+        db.execSQL(SQL_DELETE_RESERVA);
         onCreate(db);
     }
 
@@ -42,6 +44,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String SQL_DELETE_USUARIO =
             "DROP TABLE IF EXISTS " + Tablas.USUARIO.NOMBRE_TABLA;
 
+
     private static final String SQL_CREATE_VEHICULO =
             "CREATE TABLE " + Tablas.VEHICULO.NOMBRE_TABLA
                     + " ("
@@ -58,5 +61,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     + ")";
 
     private static final String SQL_DELETE_VEHICULO =
+            "DROP TABLE IF EXISTS " + Tablas.VEHICULO.NOMBRE_TABLA;
+
+
+    private static final String SQL_CREATE_RESERVA =
+            "CREATE TABLE " + Tablas.RESERVA.NOMBRE_TABLA
+                    + " ("
+                    + Tablas.RESERVA._ID + " INTEGER PRIMARY KEY, "
+                    + Tablas.RESERVA.COL_NUMERO + " INTEGER UNIQUE, "
+                    + Tablas.RESERVA.COL_EMAIL + " TEXT, "
+                    + Tablas.RESERVA.COL_CELULAR + " TEXT, "
+                    + Tablas.RESERVA.COL_PRESTAMO + " TEXT, "
+                    + Tablas.RESERVA.COL_ENTREGA + " TEXT, "
+                    + Tablas.RESERVA.COL_VALOR + " REAL, "
+                    + Tablas.VEHICULO.COL_PLACA + " TEXT"
+                    + ")";
+
+    private static final String SQL_DELETE_RESERVA =
             "DROP TABLE IF EXISTS " + Tablas.VEHICULO.NOMBRE_TABLA;
 }

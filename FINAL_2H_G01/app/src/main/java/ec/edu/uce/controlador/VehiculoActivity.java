@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -13,13 +12,20 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.support.v7.widget.SearchView;
 import android.widget.Toast;
 
+import java.util.Collections;
+import java.util.List;
+
 import ec.edu.uce.R;
+import ec.edu.uce.componentes.ComparadorVehiculo;
 import ec.edu.uce.componentes.CustomException;
 import ec.edu.uce.modelo.Vehiculo;
+import ec.edu.uce.servicios.ArchivosServicio;
+import ec.edu.uce.servicios.ConfiguracionServicio;
 import ec.edu.uce.servicios.VehiculoServicio;
 import ec.edu.uce.vista.ItemClickListener;
 import ec.edu.uce.vista.VehiculoAdapter;
@@ -27,8 +33,9 @@ import ec.edu.uce.vista.VehiculoAdapter;
 public class VehiculoActivity extends AppCompatActivity {
 
     private VehiculoAdapter adapter;
-    private VehiculoServicio vehiculoServicio = new VehiculoServicio(this);
     private SearchView searchView;
+    private VehiculoServicio vehiculoServicio = new VehiculoServicio(this);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,12 +44,9 @@ public class VehiculoActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(R.string.title_activity_vehiculo);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(floatingButtonListener);
+        findViewById(R.id.fab).setOnClickListener(floatingButtonListener);
 
         initRecyclerView();
     }
@@ -50,7 +54,13 @@ public class VehiculoActivity extends AppCompatActivity {
     private void initRecyclerView() {
         RecyclerView recyclerVehiculo = findViewById(R.id.rvVehiculo);
         recyclerVehiculo.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        adapter = new VehiculoAdapter(vehiculoServicio.listarTodos());
+
+        ConfiguracionServicio conf = new ConfiguracionServicio();
+        List<Vehiculo> vehiculos = vehiculoServicio.listarTodos();
+
+        Collections.sort(vehiculos, ComparadorVehiculo.getCompPorCosto(conf.obtener().isAsd()));
+
+        adapter = new VehiculoAdapter(vehiculos);
         adapter.setItemClickListener(btnOpcionesListener);
         recyclerVehiculo.setAdapter(adapter);
     }
@@ -58,7 +68,7 @@ public class VehiculoActivity extends AppCompatActivity {
     private View.OnClickListener floatingButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(v.getContext(), VehiculoFormActivity.class);
+            Intent intent = new Intent(v.getContext(), FormVehiculoActivity.class);
             startActivity(intent);
             finish();
         }
@@ -78,7 +88,7 @@ public class VehiculoActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int item) {
                     switch (item) {
                         case 0: // Editar
-                            Intent intent = new Intent(view.getContext(), VehiculoFormActivity.class);
+                            Intent intent = new Intent(view.getContext(), FormVehiculoActivity.class);
                             intent.putExtra("placa", vehiculo.getPlaca());
                             startActivity(intent);
                             break;
@@ -147,6 +157,16 @@ public class VehiculoActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void onDestroy() {
         vehiculoServicio.close();
         super.onDestroy();
@@ -159,6 +179,12 @@ public class VehiculoActivity extends AppCompatActivity {
             searchView.setIconified(true);
             return;
         }
+
+        Intent intent = new Intent(this, InicioActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+
         super.onBackPressed();
     }
 }

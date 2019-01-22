@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -31,7 +30,7 @@ import ec.edu.uce.componentes.CustomException;
 import ec.edu.uce.modelo.Vehiculo;
 import ec.edu.uce.servicios.VehiculoServicio;
 
-public class VehiculoFormActivity extends AppCompatActivity {
+public class FormVehiculoActivity extends AppCompatActivity {
 
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     private VehiculoServicio vehiculoServicio = new VehiculoServicio(this);
@@ -57,7 +56,7 @@ public class VehiculoFormActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_vehiculo_form);
+        setContentView(R.layout.activity_form_vehiculo);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -72,74 +71,13 @@ public class VehiculoFormActivity extends AppCompatActivity {
         placaAnterior = getIntent().getStringExtra("placa");
         nuevo = placaAnterior == null;
         if (nuevo) {
-            vehiculo = new Vehiculo(); 
+            vehiculo = new Vehiculo();
+            swEstado.setChecked(true);
         } else {
             vehiculo = vehiculoServicio.buscarPorPlaca(placaAnterior);
+            swEstado.setClickable(true);
             llenarCampos();
         }
-    }
-
-    private void guardar(View view) {
-        boolean guardar = true;
-
-        // Validaciones
-        if (!txtPlaca.getText().toString().matches("([A-Za-z]{3}-[0-9]{3,4})")) {
-            guardar = false;
-            txtPlaca.setError("La palca debe tener el siguiente formato: ABC-1234");
-        }
-        if (TextUtils.isEmpty(txtMarca.getText())) {
-            guardar = false;
-            txtMarca.setError("Este campo es obligatorio");
-        }
-        if (TextUtils.isEmpty(txtFecha.getText())) {
-            guardar = false;
-            txtFecha.setError("Este campo es obligatorio");
-        }
-        if (TextUtils.isEmpty(txtCosto.getText())) {
-            guardar = false;
-            txtCosto.setError("Este campo es obligatorio");
-        }
-        if (TextUtils.isEmpty(txtColor.getText())) {
-            guardar = false;
-            txtColor.setError("Este campo es obligatorio");
-        }
-        if (fotoBitmap == null) {
-            guardar = false;
-            Snackbar.make(view, "Debe  seleccionar una foto de vehiculo", Snackbar.LENGTH_LONG).show();
-        }
-
-
-        if (guardar) {
-            vehiculo.setPlaca(txtPlaca.getText().toString());
-            vehiculo.setMarca(txtMarca.getText().toString());
-            vehiculo.setColor(txtColor.getText().toString());
-            vehiculo.setCosto(Double.parseDouble(txtCosto.getText().toString()));
-            vehiculo.setMatriculado(swMatriculado.isChecked());
-            vehiculo.setEstado(swEstado.isChecked());
-            vehiculo.setFoto(fotoBitmap);
-            try {
-                vehiculo.setFechaFabricacion(sdf.parse(txtFecha.getText().toString()));
-            } catch (ParseException e) {
-                txtFecha.setError("El formato de fecha ingresado es incorrecto");
-            }
-            RadioButton rbTipo = findViewById(rgTipo.getCheckedRadioButtonId());
-            vehiculo.setTipo(rbTipo.getText().toString());
-
-            try {
-                if (nuevo) {
-                    vehiculoServicio.crear(vehiculo);
-                } else {
-                    vehiculoServicio.actualizar(placaAnterior, vehiculo);
-                }
-                Toast.makeText(view.getContext(), "Vehiculo " + vehiculo.getPlaca() + " guardado correctamente", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(view.getContext(), VehiculoActivity.class);
-                startActivity(intent);
-                finish();
-            } catch (CustomException e) {
-                Toast.makeText(view.getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        }
-
     }
 
     @Override
@@ -150,7 +88,6 @@ public class VehiculoFormActivity extends AppCompatActivity {
             ivFoto.setImageBitmap(fotoBitmap);
             ivFoto.setVisibility(View.VISIBLE);
         }
-
         if (requestCode == REQUEST_PICK_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri uri = data.getData();
             try {
@@ -202,8 +139,64 @@ public class VehiculoFormActivity extends AppCompatActivity {
 
     private View.OnClickListener btnGuardarListener = new View.OnClickListener() {
         @Override
-        public void onClick(View v) {
-            guardar(v);
+        public void onClick(View view) {
+            boolean guardar = true;
+
+            // Validaciones
+            if (!txtPlaca.getText().toString().matches("([A-Za-z]{3}-[0-9]{3,4})")) {
+                guardar = false;
+                txtPlaca.setError("La palca debe tener el siguiente formato: ABC-1234");
+            }
+            if (TextUtils.isEmpty(txtMarca.getText())) {
+                guardar = false;
+                txtMarca.setError("Este campo es obligatorio");
+            }
+            if (TextUtils.isEmpty(txtFecha.getText())) {
+                guardar = false;
+                txtFecha.setError("Este campo es obligatorio");
+            }
+            if (TextUtils.isEmpty(txtCosto.getText())) {
+                guardar = false;
+                txtCosto.setError("Este campo es obligatorio");
+            }
+            if (TextUtils.isEmpty(txtColor.getText())) {
+                guardar = false;
+                txtColor.setError("Este campo es obligatorio");
+            }
+            if (fotoBitmap == null) {
+                guardar = false;
+                Snackbar.make(view, "Debe  seleccionar una foto de vehiculo", Snackbar.LENGTH_LONG).show();
+            }
+
+
+            if (guardar) {
+                vehiculo.setPlaca(txtPlaca.getText().toString());
+                vehiculo.setMarca(txtMarca.getText().toString());
+                vehiculo.setColor(txtColor.getText().toString());
+                vehiculo.setCosto(Double.parseDouble(txtCosto.getText().toString()));
+                vehiculo.setMatriculado(swMatriculado.isChecked());
+                vehiculo.setEstado(swEstado.isChecked());
+                vehiculo.setFoto(fotoBitmap);
+                try {
+                    vehiculo.setFechaFabricacion(sdf.parse(txtFecha.getText().toString()));
+                } catch (ParseException e) {
+                    txtFecha.setError("El formato de fecha ingresado es incorrecto");
+                }
+                RadioButton rbTipo = findViewById(rgTipo.getCheckedRadioButtonId());
+                vehiculo.setTipo(rbTipo.getText().toString());
+
+                try {
+                    if (nuevo) {
+                        vehiculoServicio.crear(vehiculo);
+                    } else {
+                        vehiculoServicio.actualizar(placaAnterior, vehiculo);
+                    }
+                    Toast.makeText(view.getContext(), "Vehiculo " + vehiculo.getPlaca() + " guardado correctamente", Toast.LENGTH_LONG).show();
+                    onBackPressed();
+                } catch (CustomException e) {
+                    Toast.makeText(view.getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
         }
     };
 
@@ -256,6 +249,7 @@ public class VehiculoFormActivity extends AppCompatActivity {
         swEstado.setChecked(vehiculo.getEstado());
         ivFoto.setImageBitmap(vehiculo.getFoto());
         ivFoto.setVisibility(View.VISIBLE);
+        fotoBitmap = vehiculo.getFoto();
 
         RadioButton rbTipo = rgTipo.findViewWithTag(vehiculo.getTipo());
         if (rbTipo != null) {

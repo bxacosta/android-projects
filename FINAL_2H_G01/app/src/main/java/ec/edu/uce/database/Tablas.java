@@ -25,4 +25,15 @@ public final class Tablas {
         public static final String COL_ESTADO = "estado";
         public static final String COL_TIPO = "tipo";
     }
+
+    public static class RESERVA implements BaseColumns {
+        public static final String NOMBRE_TABLA = "reserva";
+        public static final String COL_NUMERO = "numero";
+        public static final String COL_EMAIL = "email";
+        public static final String COL_CELULAR = "celular";
+        public static final String COL_PRESTAMO = "fechaPrestamo";
+        public static final String COL_ENTREGA = "fechaEntrega";
+        public static final String COL_VALOR = "valor";
+        public static final String COL_PLACA = "placa";
+    }
 }

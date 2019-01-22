@@ -8,10 +8,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
 import ec.edu.uce.R;
-import ec.edu.uce.modelo.Vehiculo;
+import ec.edu.uce.modelo.Ordenar;
+import ec.edu.uce.servicios.ArchivosServicio;
 
 public class InicioActivity extends AppCompatActivity {
 
@@ -23,11 +23,11 @@ public class InicioActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Button btnVehiculo = findViewById(R.id.btnVehiculo);
-        btnVehiculo.setOnClickListener(btnVehiculoListener);
+        findViewById(R.id.btnVehiculo).setOnClickListener(btnVehiculoListener);
 
-        Button btnReserva = findViewById(R.id.btnReserva);
-        btnVehiculo.setOnClickListener(btnReservaListener);
+        findViewById(R.id.btnReserva).setOnClickListener(btnReservaListener);
+
+        ArchivosServicio as = new ArchivosServicio();
     }
 
     private View.OnClickListener btnVehiculoListener = new View.OnClickListener() {
@@ -35,14 +35,16 @@ public class InicioActivity extends AppCompatActivity {
         public void onClick(View v) {
             Intent intent = new Intent(v.getContext(), VehiculoActivity.class);
             startActivity(intent);
+            finish();
         }
     };
 
     private View.OnClickListener btnReservaListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(v.getContext(), VehiculoActivity.class);
+            Intent intent = new Intent(v.getContext(), ReservaActivity.class);
             startActivity(intent);
+            finish();
         }
     };
 
@@ -58,10 +60,11 @@ public class InicioActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_configurar) {
+            Intent intent = new Intent(this, ConfiguracionActivity.class);
+            startActivity(intent);
             return true;
         } else if (id == R.id.action_salir) {
             finish();
-            return true;
         }
         return super.onOptionsItemSelected(item);
     }

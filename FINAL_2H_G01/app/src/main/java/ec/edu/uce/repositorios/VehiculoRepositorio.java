@@ -25,6 +25,7 @@ public class VehiculoRepositorio implements InterfazCRUD<Vehiculo, String> {
 
     private DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 
+
     private DatabaseHelper databaseHelper;
     private SQLiteDatabase database;
     private ContentValues values;
@@ -114,6 +115,7 @@ public class VehiculoRepositorio implements InterfazCRUD<Vehiculo, String> {
     public List<Vehiculo> listar() {
         List<Vehiculo> vehiculos = new ArrayList<>();
         database = databaseHelper.getReadableDatabase();
+
         String[] projection = {
                 BaseColumns._ID,
                 VEHICULO.COL_PLACA,
