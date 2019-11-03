@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
@@ -20,9 +19,8 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import ec.edu.uce.R;
 import ec.edu.uce.modelo.Reserva;
-import ec.edu.uce.modelo.Vehiculo;
 
-public class ReservaAdapter extends RecyclerView.Adapter<ReservaAdapter.VehiculoViewHolder> implements Filterable {
+public class ReservaAdapter extends RecyclerView.Adapter<ReservaAdapter.ReservaViewHolder> implements Filterable {
 
     private List<Reserva> reservas;
     private List<Reserva> reservasFiltradas;
@@ -36,17 +34,17 @@ public class ReservaAdapter extends RecyclerView.Adapter<ReservaAdapter.Vehiculo
 
     @NonNull
     @Override
-    public VehiculoViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public ReservaViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         context = viewGroup.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View view = inflater.inflate(R.layout.item_list_vehiculo, viewGroup, false);
+        View view = inflater.inflate(R.layout.item_list_reserva, viewGroup, false);
 
-        return new VehiculoViewHolder(view);
+        return new ReservaViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull VehiculoViewHolder holder, int i) {
+    public void onBindViewHolder(@NonNull ReservaViewHolder holder, int i) {
         SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
         NumberFormat nf = new DecimalFormat("###,##0.00");
 
@@ -128,7 +126,7 @@ public class ReservaAdapter extends RecyclerView.Adapter<ReservaAdapter.Vehiculo
         };
     }
 
-    public class VehiculoViewHolder extends RecyclerView.ViewHolder {
+    public class ReservaViewHolder extends RecyclerView.ViewHolder {
         public TextView numero;
         public TextView email;
         public TextView celular;
@@ -137,7 +135,7 @@ public class ReservaAdapter extends RecyclerView.Adapter<ReservaAdapter.Vehiculo
         public TextView valor;
         public CircleImageView foto;
 
-        public VehiculoViewHolder(View itemView) {
+        public ReservaViewHolder(View itemView) {
             super(itemView);
 
             numero = itemView.findViewById(R.id.tvNumero);

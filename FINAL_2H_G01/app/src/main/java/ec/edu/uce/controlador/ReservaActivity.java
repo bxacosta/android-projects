@@ -96,11 +96,10 @@ public class ReservaActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // close search view on back button pressed
-//        if (!searchView.isIconified()) {
-//            searchView.setIconified(true);
-//            return;
-//        }
+        if (!searchView.isIconified()) {
+            searchView.setIconified(true);
+            return;
+        }
 
         Intent intent = new Intent(this, InicioActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
